@@ -1,0 +1,70 @@
+<header class="bg-white text-secondary shadow-md sticky top-0 z-50">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-20">
+      
+      <!-- Logo -->
+      <a routerLink="/" class="text-2xl font-bold text-primary hover:text-red-700 transition-colors">
+        Ferramentas&Cia
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-6">
+        <a routerLink="/" class="text-secondary hover:text-primary transition-colors" routerLinkActive="text-primary" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        <a routerLink="/products" class="text-secondary hover:text-primary transition-colors" routerLinkActive="text-primary">Produtos</a>
+        <a routerLink="/admin" class="text-secondary hover:text-primary transition-colors" routerLinkActive="text-primary">Admin</a>
+      </nav>
+
+      <!-- Search & Cart -->
+      <div class="hidden md:flex items-center space-x-4">
+        <div class="relative">
+          <input type="text" placeholder="Buscar..." class="bg-gray-100 border border-gray-300 rounded-full py-1 px-4 text-secondary placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary">
+          <svg class="w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <a routerLink="/cart" class="relative text-secondary hover:text-primary transition-colors p-2">
+          <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+          </svg>
+          @if (cartService.totalItems() > 0) {
+            <span class="absolute top-0 right-0 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              {{ cartService.totalItems() }}
+            </span>
+          }
+        </a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button (click)="toggleMobileMenu()" class="text-secondary focus:outline-none">
+          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            @if (!isMobileMenuOpen()) {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            } @else {
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            }
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  @if (isMobileMenuOpen()) {
+    <div class="md:hidden bg-white pb-4">
+      <nav class="flex flex-col items-center space-y-4">
+        <a routerLink="/" (click)="toggleMobileMenu()" class="text-secondary hover:text-primary transition-colors">Home</a>
+        <a routerLink="/products" (click)="toggleMobileMenu()" class="text-secondary hover:text-primary transition-colors">Produtos</a>
+        <a routerLink="/admin" (click)="toggleMobileMenu()" class="text-secondary hover:text-primary transition-colors">Admin</a>
+        <a routerLink="/cart" (click)="toggleMobileMenu()" class="relative text-secondary hover:text-primary transition-colors p-2 flex items-center">
+          <span>Carrinho</span>
+          @if (cartService.totalItems() > 0) {
+            <span class="ml-2 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+              {{ cartService.totalItems() }}
+            </span>
+          }
+        </a>
+      </nav>
+    </div>
+  }
+</header>

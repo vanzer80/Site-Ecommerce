@@ -1,0 +1,79 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex flex-col md:flex-row gap-8">
+    
+    <!-- Filters Sidebar -->
+    <aside class="w-full md:w-1/4">
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-bold text-secondary mb-4">Filtros</h3>
+        
+        <!-- Category Filter -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2">Categoria</h4>
+          @for(category of categories(); track category.id) {
+            <div class="flex items-center mb-2">
+              <input type="checkbox" [id]="'cat-' + category.id" [checked]="isCategorySelected(category.id)" (change)="onCategoryChange(category.id, $event)" class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary">
+              <label [for]="'cat-' + category.id" class="ml-2 text-gray-700">{{ category.name }}</label>
+            </div>
+          }
+        </div>
+
+        <!-- Brand Filter -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2">Marca</h4>
+          @for(brand of brands; track brand) {
+            <div class="flex items-center mb-2">
+              <input type="checkbox" [id]="'brand-' + brand" [checked]="isBrandSelected(brand)" (change)="onBrandChange(brand, $event)" class="h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary">
+              <label [for]="'brand-' + brand" class="ml-2 text-gray-700">{{ brand }}</label>
+            </div>
+          }
+        </div>
+
+        <!-- Price Filter -->
+        <div class="mb-6">
+          <h4 class="font-semibold mb-2">Preço</h4>
+          <input type="range" min="0" max="5000" [ngModel]="priceRange().max" (ngModelChange)="priceRange.set({min: 0, max: $event})" class="w-full">
+          <div class="text-center mt-2">Até {{ priceRange().max | currency:'BRL' }}</div>
+        </div>
+
+        <button (click)="clearFilters()" class="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition-colors">
+          Limpar Filtros
+        </button>
+      </div>
+    </aside>
+
+    <!-- Products Grid -->
+    <main class="w-full md:w-3/4">
+      <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div class="relative w-full sm:w-1/2">
+            <input type="text" placeholder="Buscar produtos..." [(ngModel)]="searchTerm" class="w-full border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring-primary">
+            <svg class="w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <div class="w-full sm:w-auto">
+            <select [(ngModel)]="sortOrder" class="border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring-primary">
+              <option value="latest">Mais Recentes</option>
+              <option value="priceAsc">Menor Preço</option>
+              <option value="priceDesc">Maior Preço</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (product of filteredProducts(); track product.id) {
+          <app-product-card [product]="product"></app-product-card>
+        } @empty {
+          <div class="col-span-full text-center py-16">
+            <p class="text-xl text-gray-600">Nenhum produto encontrado.</p>
+            <p class="text-gray-500 mt-2">Tente ajustar seus filtros.</p>
+          </div>
+        }
+      </div>
+      
+      <!-- TODO: Add pagination controls here -->
+
+    </main>
+  </div>
+</div>

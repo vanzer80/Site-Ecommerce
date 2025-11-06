@@ -1,0 +1,62 @@
+<div class="container mx-auto px-4 py-8">
+  @if (product(); as p) {
+    <div class="bg-white p-8 rounded-lg shadow-lg">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Image Gallery -->
+        <div>
+          <div class="mb-4">
+            <img [src]="selectedImage()" [alt]="p.name" class="w-full h-auto max-h-96 object-contain rounded-lg">
+          </div>
+          @if (p.images.length > 1) {
+            <div class="flex space-x-2">
+              @for (image of p.images; track image) {
+                <button (click)="changeImage(image)" class="w-20 h-20 border-2 rounded-lg overflow-hidden" [class.border-primary]="selectedImage() === image" [class.border-transparent]="selectedImage() !== image">
+                  <img [src]="image" [alt]="p.name" class="w-full h-full object-cover">
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Product Details -->
+        <div>
+          <span class="text-sm font-semibold text-gray-500">{{ p.brand }}</span>
+          <h1 class="text-3xl font-bold text-secondary mt-1 mb-4">{{ p.name }}</h1>
+          <p class="text-3xl font-bold text-gray-800 mb-6">{{ p.price | currency:'BRL' }}</p>
+          
+          <div class="mb-6">
+            @if(p.stock > 10) {
+              <span class="text-green-600 font-semibold">Em estoque</span>
+            } @else if (p.stock > 0) {
+              <span class="text-yellow-600 font-semibold">Últimas unidades</span>
+            } @else {
+              <span class="text-red-600 font-semibold">Sem estoque</span>
+            }
+          </div>
+
+          <div class="mb-6 flex items-center space-x-3">
+            <label for="quantity" class="font-semibold">Quantidade:</label>
+            <div class="flex items-center border border-gray-300 rounded-md">
+              <button (click)="decrementQuantity()" class="px-3 py-1 text-lg font-bold">-</button>
+              <span class="px-4 py-1 border-l border-r">{{ quantity() }}</span>
+              <button (click)="incrementQuantity()" class="px-3 py-1 text-lg font-bold">+</button>
+            </div>
+          </div>
+
+          <button (click)="addToCart()" [disabled]="p.stock === 0" class="w-full bg-primary text-white font-bold py-3 px-6 rounded-md hover:bg-red-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">
+            Adicionar ao Carrinho
+          </button>
+
+          <div class="mt-8">
+            <h3 class="font-bold text-lg mb-2">Descrição</h3>
+            <p class="text-gray-600 leading-relaxed">{{ p.description }}</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  } @else {
+    <p class="text-center text-xl text-gray-600 py-20">Produto não encontrado.</p>
+  }
+</div>
